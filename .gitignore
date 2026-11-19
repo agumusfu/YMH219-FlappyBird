@@ -1,0 +1,30 @@
+## Visual Studio and .NET Build Artifacts
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio cache & temporary files
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.dbmdl
+*.jfm
+*.opendb
+
+## Visual Studio Code
+.vscode/
+
+## Rider / JetBrains
+.idea/
+*.sln.docstates
+
+## OS Generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## Local runtime game data (e.g., high scores generated on client machine)
+*.local.json
