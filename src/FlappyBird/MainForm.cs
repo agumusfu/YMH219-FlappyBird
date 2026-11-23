@@ -12,7 +12,9 @@ public partial class MainForm : Form
         InitializeComponent();
 
         // 1. Oyun motorunu çalışma alanının boyutlarıyla başlat
-        _engine = new GameEngine(gameCanvas.ClientSize.Width, gameCanvas.ClientSize.Height);
+        float canvasW = gameCanvas.ClientSize.Width > 100 ? gameCanvas.ClientSize.Width : 500f;
+        float canvasH = gameCanvas.ClientSize.Height > 100 ? gameCanvas.ClientSize.Height : 572f;
+        _engine = new GameEngine(canvasW, canvasH);
 
         // 2. Motor olaylarına abone ol (Event Subscription)
         _engine.ScoreUpdated += OnScoreUpdated;
