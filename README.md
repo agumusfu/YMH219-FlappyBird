@@ -104,7 +104,7 @@ src/FlappyBird/
 
 ### Adım 1: Depoyu Klonlayın
 ```bash
-git clone https://github.com/[KULLANICI_ADINIZ]/YMH219-FlappyBird.git
+git clone https://github.com/agumusfu/YMH219-FlappyBird.git
 cd YMH219-FlappyBird
 ```
 

@@ -8,7 +8,16 @@ static class Program
     [STAThread]
     static void Main()
     {
-        ApplicationConfiguration.Initialize();
-        Application.Run(new MainForm());
+        try
+        {
+            ApplicationConfiguration.Initialize();
+            Application.Run(new MainForm());
+        }
+        catch (Exception ex)
+        {
+            string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "startup_error.log");
+            File.WriteAllText(logPath, ex.ToString());
+            MessageBox.Show(ex.Message, "Başlatma Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }    
 }
