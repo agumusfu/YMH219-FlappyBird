@@ -8,8 +8,8 @@ Bu proje, **Nesne Tabanlı Programlama (YMH 219)** dersi kapsamında geliştiril
 
 - **Ders:** Nesne Tabanlı Programlama (YMH 219)
 - **Ödev Konusu:** Ödev 3 — Flappy Bird Benzeri Masaüstü Oyunu
-- **Geliştirici / Öğrenci:** `agumusfu` ([Öğrenci Adı Soyadı Buraya Giriniz])
-- **Öğrenci Numarası:** [Öğrenci Numarası Buraya Giriniz]
+- **Geliştirici / Öğrenci:** Abdullah Gümüş (`agumusfu`)
+- **Öğrenci Numarası:** 250542016
 - **Platform / Çatı:** .NET 8.0 Windows Desktop (C# 12)
 - **Arayüz Teknolojisi:** Windows Forms (WinForms)
 
