@@ -10,6 +10,12 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+        try
+        {
+            if (!string.IsNullOrEmpty(Environment.ProcessPath))
+                this.Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath);
+        }
+        catch { }
 
         // 1. Oyun motorunu çalışma alanının boyutlarıyla başlat
         float canvasW = gameCanvas.ClientSize.Width > 100 ? gameCanvas.ClientSize.Width : 500f;
@@ -143,7 +149,7 @@ public partial class MainForm : Form
         switch (state)
         {
             case GameState.Ready:
-                lblStatusInfo.Text = "Hazır - Başlamak için Boşluk tuşuna basın veya ekrana tıklayın";
+                lblStatusInfo.Text = "Hazır - Başlamak için Boşluk'a basın";
                 btnPause.Text = "Duraklat (P)";
                 break;
             case GameState.Playing:
