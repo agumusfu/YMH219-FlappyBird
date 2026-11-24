@@ -307,15 +307,16 @@ public class GameEngine : IDisposable
 
     private void DrawOverlayMessage(Graphics g, string title, string subtitle)
     {
-        using var boxBrush = new SolidBrush(Color.FromArgb(180, 0, 0, 0));
-        using var titleFont = new Font("Arial", 16, FontStyle.Bold);
-        using var subFont = new Font("Arial", 11, FontStyle.Regular);
+        using var boxBrush = new SolidBrush(Color.FromArgb(190, 0, 0, 0));
+        using var titleFont = new Font("Arial", 14, FontStyle.Bold);
+        using var subFont = new Font("Arial", 10.5f, FontStyle.Regular);
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
         var titleSize = g.MeasureString(title, titleFont);
         var subSize = g.MeasureString(subtitle, subFont);
 
-        float boxW = Math.Max(titleSize.Width, subSize.Width) + 40f;
-        float boxH = titleSize.Height + subSize.Height + 35f;
+        float boxW = Math.Min(CanvasWidth - 36f, Math.Max(titleSize.Width, subSize.Width) + 44f);
+        float boxH = titleSize.Height + subSize.Height + 38f;
         float boxX = (CanvasWidth - boxW) / 2f;
         float boxY = (GroundY - boxH) / 2f;
 
@@ -323,16 +324,20 @@ public class GameEngine : IDisposable
         using var borderPen = new Pen(Color.FromArgb(245, 200, 50), 2f);
         g.DrawRectangle(borderPen, boxX, boxY, boxW, boxH);
 
-        g.DrawString(title, titleFont, Brushes.Gold, (CanvasWidth - titleSize.Width) / 2f, boxY + 12);
-        g.DrawString(subtitle, subFont, Brushes.White, (CanvasWidth - subSize.Width) / 2f, boxY + 18 + titleSize.Height);
+        g.DrawString(title, titleFont, Brushes.Gold, new RectangleF(boxX + 10, boxY + 10, boxW - 20, titleSize.Height + 6), sf);
+        g.DrawString(subtitle, subFont, Brushes.White, new RectangleF(boxX + 10, boxY + 20 + titleSize.Height, boxW - 20, subSize.Height + 6), sf);
     }
 
     private void DrawGameOverCard(Graphics g)
     {
-        float cardW = 280f;
-        float cardH = 175f;
+        using var hintFont = new Font("Arial", 9.5f, FontStyle.Italic);
+        string hint = "Yeniden başlamak için BOŞLUK veya R'ye basın";
+        var hintSize = g.MeasureString(hint, hintFont);
+
+        float cardW = Math.Min(CanvasWidth - 36f, Math.Max(340f, hintSize.Width + 40f));
+        float cardH = 180f;
         float cardX = (CanvasWidth - cardW) / 2f;
-        float cardY = (GroundY - cardH) / 2f - 10f;
+        float cardY = (GroundY - cardH) / 2f + 12f;
 
         // Kart Arka Planı (Panel)
         using (var cardBrush = new SolidBrush(Color.FromArgb(222, 216, 149)))
@@ -342,13 +347,13 @@ public class GameEngine : IDisposable
             g.DrawRectangle(borderPen, cardX, cardY, cardW, cardH);
         }
 
-        // GAME OVER Başlığı
+        // GAME OVER Başlığı (kutunun üst kenarının tam üstünde)
         using (var goFont = new Font("Impact", 24, FontStyle.Bold))
         {
             string goText = "GAME OVER";
             var goSize = g.MeasureString(goText, goFont);
             float goX = (CanvasWidth - goSize.Width) / 2f;
-            float goY = cardY - 45f;
+            float goY = cardY - goSize.Height - 6f;
 
             // Dış çizgi
             using var outBrush = new SolidBrush(Color.FromArgb(80, 30, 20));
@@ -359,35 +364,37 @@ public class GameEngine : IDisposable
                     g.DrawString(goText, goFont, outBrush, goX + dx, goY + dy);
                 }
             }
-            g.DrawString(goText, goFont, new SolidBrush(Color.FromArgb(235, 75, 45)), goX, goY);
+            using var goBrush = new SolidBrush(Color.FromArgb(235, 75, 45));
+            g.DrawString(goText, goFont, goBrush, goX, goY);
         }
 
         // Skor Tablosu
         using (var labelFont = new Font("Arial", 11, FontStyle.Bold))
-        using (var valFont = new Font("Impact", 18, FontStyle.Regular))
+        using (var valFont = new Font("Impact", 20, FontStyle.Regular))
         using (var textBrush = new SolidBrush(Color.FromArgb(85, 60, 20)))
+        using (var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
         {
+            float leftColX = cardX + 36f;
+            float rightColX = cardX + cardW - 145f;
+
             // Skor
-            g.DrawString("SKOR", labelFont, textBrush, cardX + 30, cardY + 25);
-            g.DrawString(ScoreManager.CurrentScore.ToString(), valFont, textBrush, cardX + 30, cardY + 45);
+            g.DrawString("SKOR", labelFont, textBrush, leftColX, cardY + 26);
+            g.DrawString(ScoreManager.CurrentScore.ToString(), valFont, textBrush, leftColX, cardY + 50);
 
             // En Yüksek Skor
-            g.DrawString("EN YÜKSEK", labelFont, textBrush, cardX + 160, cardY + 25);
-            g.DrawString(ScoreManager.HighScore.ToString(), valFont, textBrush, cardX + 160, cardY + 45);
+            g.DrawString("EN YÜKSEK", labelFont, textBrush, rightColX, cardY + 26);
+            g.DrawString(ScoreManager.HighScore.ToString(), valFont, textBrush, rightColX, cardY + 50);
 
             if (ScoreManager.IsNewHighScore)
             {
                 using var badgeBrush = new SolidBrush(Color.FromArgb(220, 50, 40));
-                g.FillRectangle(badgeBrush, cardX + 155, cardY + 10, 80, 18);
-                using var badgeFont = new Font("Arial", 8, FontStyle.Bold);
-                g.DrawString("YENİ REKOR!", badgeFont, Brushes.White, cardX + 160, cardY + 12);
+                g.FillRectangle(badgeBrush, rightColX, cardY + 8, 86, 17);
+                using var badgeFont = new Font("Arial", 7.5f, FontStyle.Bold);
+                g.DrawString("YENİ REKOR!", badgeFont, Brushes.White, new RectangleF(rightColX, cardY + 8, 86, 17), sf);
             }
 
-            // Yeniden Başlat Yönergesi
-            using var hintFont = new Font("Arial", 10, FontStyle.Italic);
-            string hint = "Yeniden başlamak için BOŞLUK veya R'ye basın";
-            var hintSize = g.MeasureString(hint, hintFont);
-            g.DrawString(hint, hintFont, Brushes.Black, (CanvasWidth - hintSize.Width) / 2f, cardY + 135);
+            // Yeniden Başlat Yönergesi (kutu içine tam sığar ve ortalanır)
+            g.DrawString(hint, hintFont, Brushes.Black, new RectangleF(cardX + 12f, cardY + 125f, cardW - 24f, 40f), sf);
         }
     }
 
